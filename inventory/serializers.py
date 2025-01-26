@@ -9,7 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2)
-    category = serializers.PrimaryKeyRelatedField(read_only=True)
+    category = CategorySerializer()
 
     class Meta:
         model = Product
