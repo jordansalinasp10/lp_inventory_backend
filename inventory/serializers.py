@@ -9,8 +9,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2)
-    category = CategorySerializer()
-
     class Meta:
         model = Product
         fields = ['product_code', 'product_name', 'price', 'quantity', 'category', 'image_url', 'created_at']

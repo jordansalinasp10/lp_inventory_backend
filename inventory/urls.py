@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import products
-from .views import image
+from unicodedata import category
+
+from .views import products, image, categories
 
 urlpatterns = [
     path('products/', products.get_products, name='get_products'),
@@ -11,4 +12,8 @@ urlpatterns = [
 
     path('image/update/<str:sku>', image.upload_product_image, name='upload-product-image'),
     path('image/<str:sku>', image.get_signed_product_image, name='get_product_image'),
+
+    path('categories/', categories.get_categories, name='get_categories'),
+    path('categories/<str:category_id>/',categories.get_category_by_id, name = 'get_categories')
+
 ]
