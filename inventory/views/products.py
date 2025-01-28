@@ -11,16 +11,15 @@ from django.views.decorators.csrf import csrf_exempt
 def get_products(request):
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True)
-    for product in serializer.data:
-        product['price'] = float(product['price'])
+
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def get_product_by_code(request, product_code):
-    # Utilizamos get_object_or_404 para manejar automáticamente el error 404
     product = get_object_or_404(Product, product_code=product_code)
     serializer = ProductSerializer(product)
+    serializer.data['price'] = float(serializer.data['price'])
     return Response(serializer.data)
 
 @api_view(['POST'])

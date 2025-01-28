@@ -17,10 +17,11 @@ def upload_image_to_azure(image_file, sku):
     return blob_client.url
 
 
-def generate_signed_url(sku, expiry_minutes=30):
+def generate_signed_url(sku,image_url, expiry_minutes=30):
+    if image_url is None:
+        return None
     blob_name = f"{sku}.jpg"
     expiry_time = datetime.utcnow() + timedelta(minutes=expiry_minutes)
-
     # Genera el SAS token
     sas_token = generate_blob_sas(
         account_name=account_name,
@@ -32,4 +33,5 @@ def generate_signed_url(sku, expiry_minutes=30):
     )
 
     signed_url = f"https://{account_name}.blob.core.windows.net/{container_name}/{blob_name}?{sas_token}"
+    signed_url = f"{image_url}?{sas_token}"
     return signed_url
