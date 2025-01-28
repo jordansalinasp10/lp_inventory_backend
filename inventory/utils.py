@@ -32,6 +32,5 @@ def generate_signed_url(sku,image_url, expiry_minutes=30):
         expiry=expiry_time
     )
 
-    signed_url = f"https://{account_name}.blob.core.windows.net/{container_name}/{blob_name}?{sas_token}"
     signed_url = f"{image_url}?{sas_token}"
     return signed_url
