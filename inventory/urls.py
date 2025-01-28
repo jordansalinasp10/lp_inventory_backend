@@ -10,7 +10,8 @@ urlpatterns = [
     path('products/<str:product_code>/update/', products.update_product, name='update_product'),
     path('products/<str:product_code>/delete/', products.delete_product, name='delete_product'),
 
-    path('image/update/<str:sku>', image.upload_product_image, name='upload-product-image'),
+    path('image/update/<str:sku>', image.upload_update_product_image, name='upload-product-image'),
+    path('image/create/<str:sku>', image.upload_image, name='upload-product-image'),
     path('image/<str:sku>', image.get_signed_product_image, name='get_product_image'),
 
     path('categories/', categories.get_categories, name='get_categories'),

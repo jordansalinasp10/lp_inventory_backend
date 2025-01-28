@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,7 +10,7 @@ from inventory.utils import upload_image_to_azure, generate_signed_url
 
 @csrf_exempt
 @api_view(['POST'])
-def upload_product_image(request, sku):
+def upload_update_product_image(request, sku):
     product = get_object_or_404(Product, product_code=sku)
     image_file = request.FILES.get('image') # Verifica si se ha enviado un archivo
     if not image_file:
@@ -41,3 +42,29 @@ def get_signed_product_image(request, sku):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+
+
+@csrf_exempt
+@api_view(['POST'])
+def upload_image(request, sku):
+    print("Datos recibidos en el backend:", request.data)
+    image_file = request.FILES.get('image')
+    if not image_file:
+        return JsonResponse(
+            {"error": "No image file provided."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    try:
+        image_url = upload_image_to_azure(image_file, sku)
+
+        return JsonResponse(
+            {"message": "Image uploaded successfully.", "image_url": image_url},
+            status=status.HTTP_200_OK
+        )
+    except Exception as e:
+        print(f"Error uploading image: {e}")
+        return JsonResponse(
+            {"error": "Failed to upload image."},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
